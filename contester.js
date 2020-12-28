@@ -176,6 +176,7 @@ class Simulator {
 
   getAvailableMoves(pokemon_resource) {
     let self = this;
+    console.log("Have this many moves:", pokemon_resource.moves);
     return pokemon_resource.moves.reduce(function(total, movename) {
       if (!self.checkLearnable(movename, 'RSEFLCX')) {
         return total;
