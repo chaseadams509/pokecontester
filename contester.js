@@ -1,36 +1,38 @@
 const EXPECTED_JAM = 1.7;
 class Move {
-  constructor({appeal=0, name="", description="", bonus_order={}, priority=-1, no_more=false, no_penalty=false,
+  constructor({appeal=0, name="", type="", description="", bonus_order={}, priority=-1, no_more=false, no_penalty=false,
                  compound_condition=false, star_additions=0, jam_factor=1, contest_combos=new Set()}) {
-        this.appeal = appeal;
-        this.name = name;
-        this.description = description;
-        this.priority = priority;
-        this.bonus_order = bonus_order;
+    this.appeal = appeal;
+    this.name = name;
+    this.type = type;
+    this.description = description;
+    this.priority = priority;
+    this.bonus_order = bonus_order;
 
-        this.no_more = no_more;
-        this.no_penalty = no_penalty;
-        this.compound_condition = compound_condition;
-        this.star_additions = star_additions;
-        this.jam_factor = jam_factor;
+    this.no_more = no_more;
+    this.no_penalty = no_penalty;
+    this.compound_condition = compound_condition;
+    this.star_additions = star_additions;
+    this.jam_factor = jam_factor;
 
-        this.contest_combos = contest_combos;
+    this.contest_combos = contest_combos;
   }
   
-  copy(name) {
-        return new Move({
-        appeal: this.appeal,
-        name: name,
-        description: this.description,
-        bonus_order: this.bonus_order,
-        priority: this.priority,
-        no_more: this.no_more,
-        no_penalty: this.no_penalty,
-        compound_condition: this.compound_condition,
-        star_additions: this.star_additions,
-        jam_factor: this.jam_factor,
-        contest_combos: this.contest_combos}
-        );
+  copy(name, type) {
+    return new Move({
+      appeal: this.appeal,
+      name: name,
+      type: type,
+      description: this.description,
+      bonus_order: this.bonus_order,
+      priority: this.priority,
+      no_more: this.no_more,
+      no_penalty: this.no_penalty,
+      compound_condition: this.compound_condition,
+      star_additions: this.star_additions,
+      jam_factor: this.jam_factor,
+      contest_combos: this.contest_combos}
+      );
   }
 }
 
@@ -117,7 +119,8 @@ class State {
 }
 
 class Simulateor {
-  constructor() {
+  constructor(pokedex) {
+    this.P = pokedex;
     this.checked_sates = {}
   }
   
@@ -150,31 +153,35 @@ class Simulateor {
 
     return {points, used_combo};
   }
+  
+  calculateContest(pokemon) {
+    this.P.getPokemonByName(pokemon) // with Promise
+    .then(function (pokemon_resource) {
+      console.log(pokemon_resource);
+        available_moves = pokemon_resource.moves.reduce(function(total, movename) {
+          this.P.getMoveByName(movename.move.name).then(function (move) {
+            if (move.contest_effect == null) {
+              return total;
+            }
+            move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
+            return total.push(move_obj);
+          });
+          return total;
+        }, new Array());
+      console.log(available_moves.length);
+      });
+  }
 
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
   const P = new Pokedex.Pokedex()
+  const simulator = new Simulator(P);
   const form = document.getElementById('pokeform');
-  console.log(nullMove.name);
 
   function computeSubmit(event) {
     const pokemon = form.elements.pokemon.value
-    P.getPokemonByName(pokemon) // with Promise
-    .then(function (pokemon_resource) {
-      console.log(pokemon_resource);
-        available_moves = pokemon_resource.moves.reduce(function(total, movename) {
-          P.getMoveByName(movename.move.name).then(function (move) {
-            if (move.contest_effect == null) {
-              return total;
-            }
-            console.log(move.contest_effect.url);
-            move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name);
-            return total.push(move_obj);
-          });
-          return total;
-        }, new Array());
-      });
+    simulator.calculateContest(pokemon);
     event.preventDefault();
   }
 
