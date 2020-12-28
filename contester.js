@@ -164,7 +164,7 @@ class Simulator {
             return true;
         }
         if (version_group_detail.version_group.name === "firered-leafgreen" &&
-                (allowed_games.includes('F') || allowed_games.includes('L')) {
+                (allowed_games.includes('F') || allowed_games.includes('L'))) {
             return true;
         }
         if (version_group_detail.version_group.name === "colosseum" && allowed_games.includes('C')) {
@@ -186,7 +186,12 @@ class Simulator {
             if (move.contest_effect == null) {
               return total;
             }
-            move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
+            let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
+            if (move.contest_combos && move.contest_combos.normal && move.contest_combos.normal.use_before) {
+              move_obj.contest_combos = move.contest_combos.normal.use_before.reduce(function(all_combos, c) {
+                return all_combos.add(c.name);
+              }, new Set());
+            }
             return total.push(move_obj);
           });
           return total;
