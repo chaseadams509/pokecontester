@@ -192,6 +192,7 @@ class Simulator {
             return all_combos.add(c.name);
           }, new Set());
         }
+        console.log("Received:", total, move.name);
         return total.concat([move_obj]);
       }, new Array());
     });
