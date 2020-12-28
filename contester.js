@@ -194,38 +194,15 @@ class Simulator {
     });
   }
       
-      
-//     return pokemon_resource.moves.reduce(async(total, movename) => {
-//       console.log("Received:", total, movename.move.name);  
-      
-//       if (!this.checkLearnable(movename, 'RSEFLCX')) {
-//         return total;
-//       }
-//       let move = await this.P.getMoveByName(movename.move.name);
-//       if (move.contest_effect == null) {
-//         console.log("Contest effect is missing");
-//         return total;
-//       }
-//       console.log("Move is eligible for contest");
-//       let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
-//       if (move.contest_combos && move.contest_combos.normal && move.contest_combos.normal.use_before) {
-//         move_obj.contest_combos = move.contest_combos.normal.use_before.reduce(function(all_combos, c) {
-//           return all_combos.add(c.name);
-//         }, new Set());
-//       }
-//       console.log("Concatenating:", total, move.name);
-//       total.push(move_obj);
-//       return total;
-//     }, new Array());
-//   }
   
   calculateContest(pokemon) {
     this.P.getPokemonByName(pokemon) // with Promise
-    .then((pokemon_resource) => {
+    .then(pokemon_resource => {
       console.log(pokemon_resource);
-      let available_moves = this.getAvailableMoves(pokemon_resource);
-      console.log(available_moves.length);
+      this.getAvailableMoves(pokemon_resource).then(available_moves => {
+        console.log(available_moves.length);
       });
+    });
   }
 
 }
