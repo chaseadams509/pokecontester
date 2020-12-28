@@ -176,24 +176,25 @@ class Simulator {
 
   getAvailableMoves(pokemon_resource) {
     let self = this;
-    return pokemon_resource.moves.reduce(async function(total, movename) {
+    return pokemon_resource.moves.reduce(function(total, movename) {
       if (!self.checkLearnable(movename, 'RSEFLCX')) {
-        return Promise.resolve(total);
+        return total;
       }
-      let move = await self.P.getMoveByName(movename.move.name);
-      if (move.contest_effect == null) {
-        console.log("Contest effect is missing");
-        return Promise.resolve(total);
-      }
-      console.log("Move is eligible for contest");
-      let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
-      if (move.contest_combos && move.contest_combos.normal && move.contest_combos.normal.use_before) {
-        move_obj.contest_combos = move.contest_combos.normal.use_before.reduce(function(all_combos, c) {
-          return all_combos.add(c.name);
-        }, new Set());
-      }
-      return Promise.resolve(total.concat([move_obj]));
-    }, Promise.resolve([]));
+      self.P.getMoveByName(movename.move.name).then(function(move) {
+        if (move.contest_effect == null) {
+          console.log("Contest effect is missing");
+          return total;
+        }
+        console.log("Move is eligible for contest");
+        let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
+        if (move.contest_combos && move.contest_combos.normal && move.contest_combos.normal.use_before) {
+          move_obj.contest_combos = move.contest_combos.normal.use_before.reduce(function(all_combos, c) {
+            return all_combos.add(c.name);
+          }, new Set());
+        }
+        return total.concat([move_obj]);
+      }, new Array());
+    });
   }
   
   calculateContest(pokemon) {
