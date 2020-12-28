@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const P = new Pokedex.Pokedex()
   const form = document.getElementById('pokeform');
   const nullMove = new Move({name: "null"});
-  consol.log(nullMove.name);
+  console.log(nullMove.name);
 
   function computeSubmit(event) {
     const pokemon = form.elements.pokemon.value
