@@ -179,7 +179,7 @@ class Simulator {
 
   getAvailableMoves(pokemon_resource) {
     return pokemon_resource.moves.reduce(function(total, movename) {
-          if (!this.checkLearnable(movename, 'RSEFLCX')) {
+          if (!checkLearnable(movename, 'RSEFLCX')) {
             return total;
           }
           P.getMoveByName(movename.move.name).then(function (move) {
