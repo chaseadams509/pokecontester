@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-//   const Pokedex = require("pokeapi-js-wrapper")
   const P = new Pokedex.Pokedex()
+  const form = document.getElementById('pokeform');  
 
-  P.getPokemonByName("eevee") // with Promise
+  function computeSubmit(event) {
+    const pokemon = form.elements.pokemon.value
+    P.getPokemonByName(pokemon) // with Promise
     .then(function (response) {
       console.log(response)
-    })
+      })
+    event.preventDefault();
+  }
+
+  form.addEVentListener('submit', computeSubmit);
 })
