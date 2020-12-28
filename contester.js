@@ -182,7 +182,7 @@ class Simulator {
           if (!this.checkLearnable(movename, 'RSEFLCX')) {
             return total;
           }
-          this.P.getMoveByName(movename.move.name).then(function (move) {
+          P.getMoveByName(movename.move.name).then(function (move) {
             if (move.contest_effect == null) {
               return total;
             }
@@ -199,10 +199,10 @@ class Simulator {
   }
   
   calculateContest(pokemon) {
-    this.P.getPokemonByName(pokemon) // with Promise
+    P.getPokemonByName(pokemon) // with Promise
     .then(function (pokemon_resource) {
       console.log(pokemon_resource);
-      available_moves = this.getAvailableMoves(pokemon_resource);
+      available_moves = getAvailableMoves(pokemon_resource);
       console.log(available_moves.length);
       });
   }
