@@ -155,34 +155,29 @@ class Simulator {
   }
   
   checkLearnable(movename, allowed_games) {
-    movename.version_group_details.forEach(function(version_group_detail) {
-        if (version_group_detail.version_group.name === "ruby-sapphire" &&
-                (allowed_games.includes('R') || allowed_games.includes('S'))) {
-          console.log("Found move in Ruby/Sapphire");
-          return true;
-        }
-        if (version_group_detail.version_group.name === "emerald" && allowed_games.includes('E')) {
-          return true;
-        }
-        if (version_group_detail.version_group.name === "firered-leafgreen" &&
-                (allowed_games.includes('F') || allowed_games.includes('L'))) {
-          return true;
-        }
-        if (version_group_detail.version_group.name === "colosseum" && allowed_games.includes('C')) {
-          return true;
-        }
-        if (version_group_detail.version_group.name === "xd" && allowed_games.includes('X')) {
-          return true;
-        }
-    });
-    return false;
+    return movename.version_group_details.reduce(function(others, version_group_detail) {
+      if (version_group_detail.version_group.name === "ruby-sapphire" &&
+          (allowed_games.includes('R') || allowed_games.includes('S'))) {
+        return true;
+      } else if (version_group_detail.version_group.name === "emerald" && allowed_games.includes('E')) {
+        return true;
+      } else if (version_group_detail.version_group.name === "firered-leafgreen" &&
+           (allowed_games.includes('F') || allowed_games.includes('L'))) {
+        return true;
+      } else if (version_group_detail.version_group.name === "colosseum" && allowed_games.includes('C')) {
+        return true;
+      } else if (version_group_detail.version_group.name === "xd" && allowed_games.includes('X')) {
+        return true;
+      } else {
+        return others;
+      }
+    }, false);
   }
 
   getAvailableMoves(pokemon_resource) {
     let self = this;
     return pokemon_resource.moves.reduce(function(total, movename) {
           if (!self.checkLearnable(movename, 'RSEFLCX')) {
-            console.log("Move isn't learnable in RSEFLCX");
             return total;
           }
           self.P.getMoveByName(movename.move.name).then(function (move) {
