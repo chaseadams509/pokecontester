@@ -158,20 +158,21 @@ class Simulator {
     movename.version_group_details.forEach(function(version_group_detail) {
         if (version_group_detail.version_group.name === "ruby-sapphire" &&
                 (allowed_games.includes('R') || allowed_games.includes('S'))) {
-            return true;
+          console.log("Found move in Ruby/Sapphire");
+          return true;
         }
         if (version_group_detail.version_group.name === "emerald" && allowed_games.includes('E')) {
-            return true;
+          return true;
         }
         if (version_group_detail.version_group.name === "firered-leafgreen" &&
                 (allowed_games.includes('F') || allowed_games.includes('L'))) {
-            return true;
+          return true;
         }
         if (version_group_detail.version_group.name === "colosseum" && allowed_games.includes('C')) {
-            return true;
+          return true;
         }
         if (version_group_detail.version_group.name === "xd" && allowed_games.includes('X')) {
-            return true;
+          return true;
         }
     });
     return false;
@@ -187,6 +188,7 @@ class Simulator {
             if (move.contest_effect == null) {
               return total;
             }
+            console.log("Move is eligible for contest");
             let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
             if (move.contest_combos && move.contest_combos.normal && move.contest_combos.normal.use_before) {
               move_obj.contest_combos = move.contest_combos.normal.use_before.reduce(function(all_combos, c) {
@@ -195,7 +197,6 @@ class Simulator {
             }
             return total.push(move_obj);
           });
-          return total;
         }, new Array());
   }
   
