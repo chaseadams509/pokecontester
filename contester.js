@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-  const Pokedex = require("pokeapi-js-wrapper")
+//   const Pokedex = require("pokeapi-js-wrapper")
   const P = new Pokedex.Pokedex()
 
   P.getPokemonByName("eevee") // with Promise
