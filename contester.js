@@ -204,7 +204,7 @@ class Simulator {
     self.P.getPokemonByName(pokemon) // with Promise
     .then(function (pokemon_resource) {
       console.log(pokemon_resource);
-      available_moves = self.getAvailableMoves(pokemon_resource);
+      let available_moves = self.getAvailableMoves(pokemon_resource);
       console.log(available_moves.length);
       });
   }
