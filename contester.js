@@ -182,10 +182,12 @@ class Simulator {
     let self = this;
     return pokemon_resource.moves.reduce(function(total, movename) {
           if (!self.checkLearnable(movename, 'RSEFLCX')) {
+            console.log("Move isn't learnable in RSEFLCX");
             return total;
           }
           self.P.getMoveByName(movename.move.name).then(function (move) {
             if (move.contest_effect == null) {
+              console.log("Contest effect is missing");
               return total;
             }
             console.log("Move is eligible for contest");
