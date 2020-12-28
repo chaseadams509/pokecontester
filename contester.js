@@ -197,12 +197,12 @@ class Simulator {
         }, new Array());
   }
   
-  calculateContest(pokemon) {
+  async calculateContest(pokemon) {
     let self = this;
     self.P.getPokemonByName(pokemon) // with Promise
     .then(function (pokemon_resource) {
       console.log(pokemon_resource);
-      let available_moves = self.getAvailableMoves(pokemon_resource);
+      let available_moves = await self.getAvailableMoves(pokemon_resource);
       console.log(available_moves.length);
       });
   }
