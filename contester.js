@@ -74,8 +74,8 @@ const move27 = new Move({appeal: 2, name: "contest-effect/27", description: "The
 const move28 = new Move({appeal: 2, name: "contest-effect/28", description: "The appeal works great if performed last.", bonus_order: {4: 6}}); // If user appeals last this turn, earns six points instead of two.
 const move29 = new Move({appeal: 1, name: "contest-effect/29", description: "The appeal works well if the user's condition is good.", compound_condition: true}); // If user has no stars, earns one point; if one, three points; if two, five points; if three, seven points.  This does not include the appeal point bonus the stars give.
 const move30 = new Move({appeal: 3, name: "contest-effect/30", description: "The next appeal can be made earlier next turn.", priority: 1}); // User will go first next turn.
-const move31 = new Move({appeal: 3, name: "contest-effect/31", description: "The next appeal can be made later next turn.", priority=4}); // User will go last next turn.
-const move32 = new Move({appeal: 1, name: "contest-effect/32", description: "Ups the user's condition.  Helps prevent nervousness.", star_additions=1}); // User gains one star.
+const move31 = new Move({appeal: 3, name: "contest-effect/31", description: "The next appeal can be made later next turn.", priority: 4}); // User will go last next turn.
+const move32 = new Move({appeal: 1, name: "contest-effect/32", description: "Ups the user's condition.  Helps prevent nervousness.", star_additions: 1}); // User gains one star.
 const move33 = new Move({appeal: 3, name: "contest-effect/33", description: "Worsens the condition of those that made appeals."}); // Removes all stars from all Pokémon that have appealed this turn.
 
 
