@@ -17,7 +17,7 @@ class Move {
         this.contest_combos = contest_combos;
   }
   
-  getCopy(name) {
+  copy(name) {
         return new Move({
         appeal: this.appeal,
         name: name,
@@ -142,7 +142,7 @@ class Simulateor {
     }
     points += current_state.num_stars;
 
-    if (move.name == last_move.name && !move.no_penalty) {
+    if (move.name === last_move.name && !move.no_penalty) {
         points -= 1
     }
     
@@ -165,6 +165,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log(pokemon_resource);
         available_moves = pokemon_resource.moves.reduce(function(total, movename) {
           P.getMoveByName(movename.move.name).then(function (move) {
+            if (move.contest_effect == null) {
+              return total;
+            }
             console.log(move.contest_effect.url);
             move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name);
             return total.push(move_obj);
