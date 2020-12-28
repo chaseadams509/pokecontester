@@ -193,7 +193,8 @@ class Simulator {
           }, new Set());
         }
         console.log("Received:", total, move.name);
-        return total.concat([move_obj]);
+        total.push(move_obj);
+        return total;
       }, new Array());
     });
   }
