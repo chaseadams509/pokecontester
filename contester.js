@@ -18,17 +18,17 @@ class Move {
   
   getCopy(name) {
         return new Move({
-        this.appeal,
-        name,
-        this.description,
-        this.bonus_order,
-        this.priority,
-        this.no_more,
-        this.no_penalty,
-        this.compound_condition,
-        this.star_additions,
-        this.jam_factor,
-        this.contest_combos}
+        appeal = this.appeal,
+        name = name,
+        description = this.description,
+        bonus_order = this.bonus_order,
+        priority = this.priority,
+        no_more = this.no_more,
+        no_penalty = this.no_penalty,
+        compound_condition = this.compound_condition,
+        star_additions = this.star_additions,
+        jam_factor = this.jam_factor,
+        contest_combos = this.contest_combos}
         );
   }
 }
