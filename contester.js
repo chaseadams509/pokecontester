@@ -178,12 +178,12 @@ class Simulator {
     let self = this;
     return pokemon_resource.moves.reduce(async function(total, movename) {
       if (!self.checkLearnable(movename, 'RSEFLCX')) {
-        return total;
+        return Promise.resolve(total);
       }
       let move = await self.P.getMoveByName(movename.move.name);
       if (move.contest_effect == null) {
         console.log("Contest effect is missing");
-        return total;
+        return Promise.resolve(total);
       }
       console.log("Move is eligible for contest");
       let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
@@ -192,8 +192,8 @@ class Simulator {
           return all_combos.add(c.name);
         }, new Set());
       }
-      return total.push(move_obj);
-    }, new Array());
+      return Promise.resolve(total.concat([move_obj]));
+    }, Promise.resolve([]));
   }
   
   calculateContest(pokemon) {
