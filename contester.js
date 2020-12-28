@@ -118,13 +118,13 @@ class State {
   }
 }
 
-class Simulateor {
+class Simulator {
   constructor(pokedex) {
     this.P = pokedex;
     this.checked_sates = {}
   }
   
-  calculate_points(move, current_state) {
+  calculatePoints(move, current_state) {
     let points = move.appeal;
     let last_move = nullMove;
     let used_combo = false;
@@ -154,11 +154,34 @@ class Simulateor {
     return {points, used_combo};
   }
   
-  calculateContest(pokemon) {
-    this.P.getPokemonByName(pokemon) // with Promise
-    .then(function (pokemon_resource) {
-      console.log(pokemon_resource);
-        available_moves = pokemon_resource.moves.reduce(function(total, movename) {
+  checkLearnable(movename, allowed_games) {
+    movename.version_group_details.foreach(function(version_group_detail) {
+        if (version_group_detail.version_group.name === "ruby-sapphire" &&
+                (allowed_games.includes('R') || allowed_games.includes('S'))) {
+            return true;
+        }
+        if (version_group_detail.version_group.name === "emerald" && allowed_games.includes('E')) {
+            return true;
+        }
+        if (version_group_detail.version_group.name === "firered-leafgreen" &&
+                (allowed_games.includes('F') || allowed_games.includes('L')) {
+            return true;
+        }
+        if (version_group_detail.version_group.name === "colosseum" && allowed_games.includes('C')) {
+            return true;
+        }
+        if (version_group_detail.version_group.name === "xd" && allowed_games.includes('X')) {
+            return true;
+        }
+    });
+    return false;
+  }
+
+  getAvailableMoves(pokemon_resource) {
+    return pokemon_resource.moves.reduce(function(total, movename) {
+          if (!this.checkLearnable(movename, 'RSEFLCX')) {
+            return total;
+          }
           this.P.getMoveByName(movename.move.name).then(function (move) {
             if (move.contest_effect == null) {
               return total;
@@ -168,6 +191,13 @@ class Simulateor {
           });
           return total;
         }, new Array());
+  }
+  
+  calculateContest(pokemon) {
+    this.P.getPokemonByName(pokemon) // with Promise
+    .then(function (pokemon_resource) {
+      console.log(pokemon_resource);
+      available_moves = this.getAvailableMoves(pokemon_resource);
       console.log(available_moves.length);
       });
   }
