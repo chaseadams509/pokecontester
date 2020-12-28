@@ -11,5 +11,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     event.preventDefault();
   }
 
-  form.addEVentListener('submit', computeSubmit);
+  form.addEventListener('submit', computeSubmit);
 })
