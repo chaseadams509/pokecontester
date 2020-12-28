@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name);
             return total.push(move_obj);
           });
+          return total;
         }, new Array());
-      return total;
       });
     event.preventDefault();
   }
