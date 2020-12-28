@@ -178,11 +178,12 @@ class Simulator {
   }
 
   getAvailableMoves(pokemon_resource) {
+    let self = this;
     return pokemon_resource.moves.reduce(function(total, movename) {
-          if (!checkLearnable(movename, 'RSEFLCX')) {
+          if (!self.checkLearnable(movename, 'RSEFLCX')) {
             return total;
           }
-          P.getMoveByName(movename.move.name).then(function (move) {
+          self.P.getMoveByName(movename.move.name).then(function (move) {
             if (move.contest_effect == null) {
               return total;
             }
@@ -199,10 +200,11 @@ class Simulator {
   }
   
   calculateContest(pokemon) {
-    P.getPokemonByName(pokemon) // with Promise
+    let self = this;
+    self.P.getPokemonByName(pokemon) // with Promise
     .then(function (pokemon_resource) {
       console.log(pokemon_resource);
-      available_moves = getAvailableMoves(pokemon_resource);
+      available_moves = self.getAvailableMoves(pokemon_resource);
       console.log(available_moves.length);
       });
   }
