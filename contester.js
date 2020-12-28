@@ -194,8 +194,8 @@ class Simulator {
           }, new Set());
         }
         return total.push(move_obj);
-      }, new Array());
-    })();
+      })();
+    }, new Array());
   }
   
   calculateContest(pokemon) {
