@@ -178,6 +178,7 @@ class Simulator {
     let self = this;
     console.log("Have this many moves:", pokemon_resource.moves);
     return pokemon_resource.moves.reduce(async function(total, movename) {
+      console.log("Received:", total, movename.move.name);
       if (!self.checkLearnable(movename, 'RSEFLCX')) {
         return total;
       }
@@ -193,7 +194,7 @@ class Simulator {
           return all_combos.add(c.name);
         }, new Set());
       }
-      console.log("Received:", total, move.name);
+      console.log("Concatenating:", total, move.name);
       total.push(move_obj);
       return total;
     }, new Array());
