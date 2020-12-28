@@ -1,6 +1,6 @@
 class Move {
-  constructor({appeal=0, name="", description="", bonus_order=new Set(), priority=-1, no_more=False, no_penalty=False,
-                 compound_condition=False, star_additions=0, jam_factor=1, contest_combos=new Set()}) {
+  constructor({appeal=0, name="", description="", bonus_order=new Set(), priority=-1, no_more=false, no_penalty=false,
+                 compound_condition=false, star_additions=0, jam_factor=1, contest_combos=new Set()}) {
         this.appeal = appeal;
         this.name = name;
         this.description = description;
