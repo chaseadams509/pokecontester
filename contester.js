@@ -175,7 +175,6 @@ class Simulator {
   }
 
   getAvailableMoves(pokemon_resource) {
-    console.log("Have this many moves:", pokemon_resource.moves);
     let movePromises = pokemon_resource.moves.
     filter(movename => this.checkLearnable(movename, 'RSEFLCX')).
     map(movename => this.P.getMoveByName(movename.move.name));
@@ -198,9 +197,8 @@ class Simulator {
   calculateContest(pokemon) {
     this.P.getPokemonByName(pokemon) // with Promise
     .then(pokemon_resource => {
-      console.log(pokemon_resource);
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
-        console.log(available_moves.length);
+        console.log("Possible moves for contests: ", available_moves.length);
       });
     });
   }
