@@ -166,11 +166,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         available_moves = pokemon_resource.moves.reduce(function(total, movename) {
           P.getMoveByName(movename.move.name).then(function (move) {
             console.log(move.contest_effect.url);
-            return total.concat([contest_effect_to_move[move.contest_effect.url]]);
+            move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name);
+            return total.push(move_obj);
           });
-        }, []);
+        }, new Array());
       return total;
-      })
+      });
     event.preventDefault();
   }
 
