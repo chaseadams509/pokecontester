@@ -1,3 +1,4 @@
+const EXPECTED_JAM = 1.7;
 class Move {
   constructor({appeal=0, name="", description="", bonus_order={}, priority=-1, no_more=false, no_penalty=false,
                  compound_condition=false, star_additions=0, jam_factor=1, contest_combos=new Set()}) {
@@ -30,16 +31,6 @@ class Move {
         jam_factor: this.jam_factor,
         contest_combos: this.contest_combos}
         );
-  }
-}
-
-class State {
-  constructor({num_turns=5, used_moves=new Set(), current_points=0, num_stars=0, used_combo=false}) {
-        this.num_turns = num_turns;
-        this.used_moves = used_moves;
-        this.current_points = current_points;
-        this.num_stars = num_stars;
-        this.used_combo = used_combo;
   }
 }
 
@@ -79,6 +70,89 @@ const move32 = new Move({appeal: 1, name: "contest-effect/32", description: "Ups
 const move33 = new Move({appeal: 3, name: "contest-effect/33", description: "Worsens the condition of those that made appeals."}); // Removes all stars from all Pokémon that have appealed this turn.
 
 
+const contest_effect_to_move = {
+    "https://pokeapi.co/api/v2/contest-effect/1/": move1,
+    "https://pokeapi.co/api/v2/contest-effect/2/": move2,
+    "https://pokeapi.co/api/v2/contest-effect/3/": move3,
+    "https://pokeapi.co/api/v2/contest-effect/4/": move4,
+    "https://pokeapi.co/api/v2/contest-effect/5/": move5,
+    "https://pokeapi.co/api/v2/contest-effect/6/": move6,
+    "https://pokeapi.co/api/v2/contest-effect/7/": move7,
+    "https://pokeapi.co/api/v2/contest-effect/8/": move8,
+    "https://pokeapi.co/api/v2/contest-effect/9/": move9,
+    "https://pokeapi.co/api/v2/contest-effect/10/": move10,
+    "https://pokeapi.co/api/v2/contest-effect/11/": move11,
+    "https://pokeapi.co/api/v2/contest-effect/12/": move12,
+    "https://pokeapi.co/api/v2/contest-effect/13/": move13,
+    "https://pokeapi.co/api/v2/contest-effect/14/": move14,
+    "https://pokeapi.co/api/v2/contest-effect/15/": move15,
+    "https://pokeapi.co/api/v2/contest-effect/16/": move16,
+    "https://pokeapi.co/api/v2/contest-effect/17/": move17,
+    "https://pokeapi.co/api/v2/contest-effect/18/": move18,
+    "https://pokeapi.co/api/v2/contest-effect/19/": move19,
+    "https://pokeapi.co/api/v2/contest-effect/20/": move20,
+    "https://pokeapi.co/api/v2/contest-effect/21/": move21,
+    "https://pokeapi.co/api/v2/contest-effect/22/": move22,
+    "https://pokeapi.co/api/v2/contest-effect/23/": move23,
+    "https://pokeapi.co/api/v2/contest-effect/24/": move24,
+    "https://pokeapi.co/api/v2/contest-effect/25/": move25,
+    "https://pokeapi.co/api/v2/contest-effect/26/": move26,
+    "https://pokeapi.co/api/v2/contest-effect/27/": move27,
+    "https://pokeapi.co/api/v2/contest-effect/28/": move28,
+    "https://pokeapi.co/api/v2/contest-effect/29/": move29,
+    "https://pokeapi.co/api/v2/contest-effect/30/": move30,
+    "https://pokeapi.co/api/v2/contest-effect/31/": move31,
+    "https://pokeapi.co/api/v2/contest-effect/32/": move32,
+    "https://pokeapi.co/api/v2/contest-effect/33/": move33,
+};
+
+class State {
+  constructor({num_turns=5, used_moves=new Set(), current_points=0, num_stars=0, used_combo=false}) {
+        this.num_turns = num_turns;
+        this.used_moves = used_moves;
+        this.current_points = current_points;
+        this.num_stars = num_stars;
+        this.used_combo = used_combo;
+  }
+}
+
+class Simulateor {
+  constructor() {
+    this.checked_sates = {}
+  }
+  
+  calculate_points(move, current_state) {
+    let points = move.appeal;
+    let last_move = nullMove;
+    let used_combo = false;
+    if (current_state.used_moves.length > 0) {
+        last_move = current_state.used_moves[current_state.used_moves - 1];
+    }
+    if (last_move.priority in move.bonus_order) {
+        points = move.bonus_order[last_move.priority]
+    }
+    if (!current_state.used_combo && last_move.name in move.contest_combos) {
+        points = move.appeal * 2
+        used_combo = true
+    }
+
+    // Stars aka Condition
+    if (move.compound_condition == true) {
+        points = current_state.num_stars * 2 + 1;
+    }
+    points += current_state.num_stars;
+
+    if (move.name == last_move.name && !move.no_penalty) {
+        points -= 1
+    }
+    
+    points -= EXPECTED_JAM * move.jam_factor;
+
+    return {points, used_combo};
+  }
+
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
   const P = new Pokedex.Pokedex()
   const form = document.getElementById('pokeform');
@@ -87,8 +161,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
   function computeSubmit(event) {
     const pokemon = form.elements.pokemon.value
     P.getPokemonByName(pokemon) // with Promise
-    .then(function (response) {
-      console.log(response)
+    .then(function (pokemon_resource) {
+      console.log(pokemon_resource);
+        available_moves = pokemon_resource.moves.reduce(function(total, movename) {
+          P.getMoveByName(movename.move.name).then(function (move) {
+            console.log(move.contest_effect.url);
+            return total.concat([contest_effect_to_move[move.contest_effect.url]]);
+          });
+        }, []);
+      return total;
       })
     event.preventDefault();
   }
