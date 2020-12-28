@@ -155,7 +155,7 @@ class Simulator {
   }
   
   checkLearnable(movename, allowed_games) {
-    movename.version_group_details.foreach(function(version_group_detail) {
+    movename.version_group_details.forEach(function(version_group_detail) {
         if (version_group_detail.version_group.name === "ruby-sapphire" &&
                 (allowed_games.includes('R') || allowed_games.includes('S'))) {
             return true;
