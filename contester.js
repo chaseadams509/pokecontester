@@ -177,15 +177,17 @@ class Simulator {
   getAvailableMoves(pokemon_resource) {
     let self = this;
     console.log("Have this many moves:", pokemon_resource.moves);
-    return pokemon_resource.moves.reduce(async function(total, movename) {
+    return pokemon_resource.moves.reduce(async function(totalPromise, movename) {
+      let total = await totalPromise.resolve();
       console.log("Received:", total, movename.move.name);
+      
       if (!self.checkLearnable(movename, 'RSEFLCX')) {
-        return total;
+        return Promise.resolve(total);
       }
       let move = await self.P.getMoveByName(movename.move.name);
       if (move.contest_effect == null) {
         console.log("Contest effect is missing");
-        return total;
+        return Promise.resolve(total);
       }
       console.log("Move is eligible for contest");
       let move_obj = contest_effect_to_move[move.contest_effect.url].copy(move.name, move.contest_type.name);
@@ -196,8 +198,8 @@ class Simulator {
       }
       console.log("Concatenating:", total, move.name);
       total.push(move_obj);
-      return total;
-    }, new Array());
+      return Promise.resolve(total);
+    }, Promise.resolve([]));
   }
   
   calculateContest(pokemon) {
