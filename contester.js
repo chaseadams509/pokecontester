@@ -132,11 +132,11 @@ class Simulator {
         last_move = current_state.used_moves[current_state.used_moves.length - 1];
     }
     if (last_move.priority in move.bonus_order) {
-        points = move.bonus_order[last_move.priority]
+        points = move.bonus_order[last_move.priority];
     }
     if (!current_state.used_combo && last_move.name in move.contest_combos) {
-        points = move.appeal * 2
-        used_combo = true
+        points = move.appeal * 2;
+        used_combo = true;
     }
 
     // Stars aka Condition
@@ -146,7 +146,7 @@ class Simulator {
     points += current_state.num_stars;
 
     if (move.name === last_move.name && !move.no_penalty) {
-        points -= 1
+        points -= 1;
     }
     
     points -= EXPECTED_JAM * move.jam_factor;
@@ -235,10 +235,10 @@ class Simulator {
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
         console.log("Possible moves for contests: ", available_moves.length);
         let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 5}));
-        let resultValue = "Most number of points is: " + best_points + "<br>";
+        let resultValue = "Most number of points is: " + best_points + "\n";
         console.log("Most number of points is: ", best_points);
         best_moves.forEach((move, i) => {
-          resultValue += (i+1) + ": " + move.name + "<br>";
+          resultValue += (i+1) + ": " + move.name + "\n";
           console.log(i, ": ", move.name);
         });
         const textNode = document.createTextNode(resultValue);
