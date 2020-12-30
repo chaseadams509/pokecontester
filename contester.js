@@ -164,7 +164,7 @@ class Simulator {
       let new_points = current_state.current_points;
       let new_moves = current_state.used_moves.concat([move])
       if (!move.no_more) {
-        let net_state = new State({
+        let next_state = new State({
           num_turns: current_state.num_turns - 1, 
           used_moves: new_moves, 
           current_points: new_points, 
