@@ -229,16 +229,20 @@ class Simulator {
   }
       
   
-  calculateContest(pokemon) {
+  calculateContest(pokemon, resultText) {
     this.P.getPokemonByName(pokemon) // with Promise
     .then(pokemon_resource => {
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
         console.log("Possible moves for contests: ", available_moves.length);
         let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 5}));
+        let resultValue = "Most number of points is: " + best_points;
         console.log("Most number of points is: ", best_points);
         best_moves.forEach((move, i) => {
+          resultValue += (i+1) + ": " + move.name;
           console.log(i, ": ", move.name);
         });
+        const textNode = document.createTextNode(resultValue);
+        resultText.appendChild(textNode);
       });
     });
   }
@@ -249,10 +253,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const P = new Pokedex.Pokedex()
   const simulator = new Simulator(P);
   const form = document.getElementById('pokeform');
+  const resultText = document.getElementById('result');
 
   function computeSubmit(event) {
     const pokemon = form.elements.pokemon.value
-    simulator.calculateContest(pokemon);
+    simulator.calculateContest(pokemon, resultText);
     event.preventDefault();
   }
 
