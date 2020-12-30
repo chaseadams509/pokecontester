@@ -156,13 +156,14 @@ class Simulator {
   
   getBestCombo(available_moves, current_state) {
     if (current_state.num_turns == 0) {
-      return {current_state.current_points, current_state.used_moves};
+      return {best_points: current_state.current_points, best_moves: current_state.used_moves};
     }
     
-    return available_moves.reduce(({most_points, most_moves}, move) => {
+    return available_moves.reduce(({best_points, best_moves}, move) => {
       let {points, used_combo} = this.calculatePoints(move, current_state);
       let new_points = current_state.current_points + points;
       let new_moves = current_state.used_moves.concat([move])
+      
       if (!move.no_more) {
         let next_state = new State({
           num_turns: current_state.num_turns - 1, 
@@ -173,12 +174,13 @@ class Simulator {
         });
         {new_points, new_moves} = this.getBestCombo(available_moves, next_state);
       }
+      
       if (new_points > most_points) {
-        return {new_points, new_moves};
+        return {best_points: new_points, best_moves: new_moves};
       } else {
-        return {most_points, most_moves};
+        return {best_points, best_moves};
       }
-    }, {current_state.current_points, current_state.used_moves});
+    }, {best_points: current_state.current_points, best_moves: current_state.used_moves});
   }
   
   checkLearnable(movename, allowed_games) {
