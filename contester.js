@@ -177,7 +177,7 @@ class Simulator {
         new_moves = final_moves.best_moves;
       }
       
-      if (new_points > most_points) {
+      if (new_points > best_points) {
         return {best_points: new_points, best_moves: new_moves};
       } else {
         return {best_points, best_moves};
