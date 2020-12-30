@@ -177,7 +177,7 @@ class Simulator {
         new_moves = final_moves.best_moves;
       }
       
-      if (current_state.num_turns == 4) {
+      if (current_state.num_turns == 5) {
         let percentage_done = 100.0 * ndx / available_moves.length;
         console.log(percentage_done, "% of the way done calculating");
       }
