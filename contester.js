@@ -235,10 +235,10 @@ class Simulator {
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
         console.log("Possible moves for contests: ", available_moves.length);
         let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 5}));
-        let resultValue = "Most number of points is: " + best_points;
+        let resultValue = "Most number of points is: " + best_points + "<br>";
         console.log("Most number of points is: ", best_points);
         best_moves.forEach((move, i) => {
-          resultValue += (i+1) + ": " + move.name;
+          resultValue += (i+1) + ": " + move.name + "<br>";
           console.log(i, ": ", move.name);
         });
         const textNode = document.createTextNode(resultValue);
