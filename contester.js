@@ -129,7 +129,7 @@ class Simulator {
     let last_move = nullMove;
     let used_combo = false;
     if (current_state.used_moves.length > 0) {
-        last_move = current_state.used_moves[current_state.used_moves - 1];
+        last_move = current_state.used_moves[current_state.used_moves.length - 1];
     }
     if (last_move.priority in move.bonus_order) {
         points = move.bonus_order[last_move.priority]
