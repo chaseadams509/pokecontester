@@ -159,7 +159,7 @@ class Simulator {
       return {best_points: current_state.current_points, best_moves: current_state.used_moves};
     }
     
-    return available_moves.reduce(({best_points, best_moves}, move) => {
+    return available_moves.reduce(({best_points, best_moves}, move, ndx) => {
       let {points, used_combo} = this.calculatePoints(move, current_state);
       let new_points = current_state.current_points + points;
       let new_moves = current_state.used_moves.concat([move]);
@@ -177,6 +177,10 @@ class Simulator {
         new_moves = final_moves.best_moves;
       }
       
+      if (current_state.num_turns == 4) {
+        let percentage_done = 100.0 * ndx / available_moves.length;
+        console.log(percentage_done, "% of the way done calculating");
+      }
       if (new_points > best_points) {
         return {best_points: new_points, best_moves: new_moves};
       } else {
@@ -230,7 +234,7 @@ class Simulator {
     .then(pokemon_resource => {
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
         console.log("Possible moves for contests: ", available_moves.length);
-        let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 2}));
+        let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 5}));
         console.log("Most number of points is: ", best_points);
         best_moves.forEach((move, i) => {
           console.log(i, ": ", move.name);
