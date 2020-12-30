@@ -172,7 +172,7 @@ class Simulator {
           num_stars: current_state.num_stars + move.star_additions, 
           used_combo: used_combo,
         });
-        {new_points, new_moves} = this.getBestCombo(available_moves, next_state);
+        {best_points: new_points, best_moves: new_moves} = this.getBestCombo(available_moves, next_state);
       }
       
       if (new_points > most_points) {
