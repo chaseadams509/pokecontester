@@ -109,7 +109,7 @@ const contest_effect_to_move = {
 };
 
 class State {
-  constructor({num_turns=5, used_moves=new Set(), current_points=0, num_stars=0, used_combo=false}) {
+  constructor({num_turns=5, used_moves=new Array(), current_points=0, num_stars=0, used_combo=false}) {
         this.num_turns = num_turns;
         this.used_moves = used_moves;
         this.current_points = current_points;
@@ -154,8 +154,35 @@ class Simulator {
     return {points, used_combo};
   }
   
+  getBestCombo(available_moves, current_state) {
+    if (current_state.num_turns == 0) {
+      return {current_state.current_points, current_state.used_moves};
+    }
+    
+    return available_moves.reduce(({most_points, most_moves}, move) => {
+      let {points, used_combo} = this.calculatePoints(move, current_state);
+      let new_points = current_state.current_points;
+      let new_moves = current_state.used_moves.concat([move])
+      if (!move.no_more) {
+        let net_state = new State({
+          num_turns: current_state.num_turns - 1, 
+          used_moves: new_moves, 
+          current_points: new_points, 
+          num_stars: current_state.num_stars + move.star_additions, 
+          used_combo: used_combo,
+        });
+        {new_points, new_moves} = this.getBestCombo(available_moves, next_state);
+      }
+      if (new_points > most_points) {
+        return {new_points, new_moves};
+      } else {
+        return {most_points, most_moves};
+      }
+    }, {current_state.current_points, current_state.used_moves});
+  }
+  
   checkLearnable(movename, allowed_games) {
-    return movename.version_group_details.reduce(function(others, version_group_detail) {
+    return movename.version_group_details.reduce((others, version_group_detail) => {
       if (version_group_detail.version_group.name === "ruby-sapphire" &&
           (allowed_games.includes('R') || allowed_games.includes('S'))) {
         return true;
@@ -199,6 +226,11 @@ class Simulator {
     .then(pokemon_resource => {
       this.getAvailableMoves(pokemon_resource).then(available_moves => {
         console.log("Possible moves for contests: ", available_moves.length);
+        let {best_points, best_moves} = this.getBestCombo(available_moves, new State({num_turns: 2}));
+        console.log("Most number of points is: ", best_points);
+        best_moves.forEach((move, i) => {
+          console.log(i, ": ", move.name);
+        });
       });
     });
   }
