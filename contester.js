@@ -161,7 +161,7 @@ class Simulator {
     
     return available_moves.reduce(({most_points, most_moves}, move) => {
       let {points, used_combo} = this.calculatePoints(move, current_state);
-      let new_points = current_state.current_points;
+      let new_points = current_state.current_points + points;
       let new_moves = current_state.used_moves.concat([move])
       if (!move.no_more) {
         let next_state = new State({
